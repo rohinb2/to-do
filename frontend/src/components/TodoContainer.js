@@ -13,19 +13,33 @@ class TodoContainer extends Component {
 
         this.state = {
             tasks: [],
-            completedTasks: []
+            taskId: 0,
+            completedTasks: [],
+            showAddTask: false
         }
 
         this.addTask = this.addTask.bind(this)
         this.completeTask = this.completeTask.bind(this)
         this.uncompleteTask = this.uncompleteTask.bind(this)
         this.getIndexOfTask = this.getIndexOfTask.bind(this)
+        this.newTask = this.newTask.bind(this)
+        this.deleteTask = this.deleteTask.bind(this)
     }
 
     // Adds the latest task to the end
     addTask(t) {
+        this.setState(prevState => {
+            return {
+                tasks: this.state.tasks.concat([t]),
+                showAddTask: false,
+                taskId: prevState.taskId + 1
+            }
+        })
+    }
+    
+    newTask() {
         this.setState({
-            tasks: this.state.tasks.concat([t]),
+            showAddTask: true
         })
     }
 
@@ -43,6 +57,28 @@ class TodoContainer extends Component {
             newTasks.splice(index, 1)
             return {tasks : newTasks}
         })
+
+    }
+
+    // Deletes task from either completed or uncompleted tasks
+    deleteTask(t) {
+        var index = this.getIndexOfTask(t, this.state.tasks);
+        if (index != -1) {
+            this.setState(prevState => {
+                let newTasks = prevState.tasks.slice()
+                newTasks.splice(index, 1)
+                return { tasks: newTasks }
+            })
+
+        } else {
+            index = this.getIndexOfTask(t, this.state.completedTasks);
+            
+            this.setState(prevState => {
+                let newCompletedTasks = prevState.completedTasks.slice()
+                newCompletedTasks.splice(index, 1)
+                return { completedTasks: newCompletedTasks }
+            })
+        }
 
     }
 
@@ -83,14 +119,17 @@ class TodoContainer extends Component {
             return new Date(b.date) - new Date(a.date);
         })
 
-
         return (
             <div>
-                <AddTask addNew={this.addTask} />
+
+                {this.state.showAddTask ? 
+                <AddTask addNew={this.addTask} taskId={this.state.taskId} /> : 
+                <button onClick={this.newTask}> New Task </button>}
+
                 <h3>Your Tasks</h3>
-                <TaskList tasks={this.state.tasks} toggleCheckbox={this.completeTask} isCompleted={false} />
+                <TaskList tasks={this.state.tasks} toggleCheckbox={this.completeTask} isCompleted={false} deleteTask={this.deleteTask} />
                 <h3>Completed Tasks</h3>
-                <TaskList tasks={this.state.completedTasks} toggleCheckbox={this.uncompleteTask} isCompleted={true} />
+                <TaskList tasks={this.state.completedTasks} toggleCheckbox={this.uncompleteTask} isCompleted={true} deleteTask={this.deleteTask} />
             </div>
         )
     }

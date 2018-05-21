@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DateTimePicker from 'react-datetime-picker';
+import CategoryPicker from './CategoryPicker'
 
 require('../static/css/AddTask.css')
 "use strict";
@@ -12,14 +13,15 @@ class AddTask extends Component {
         super(props)
 
         this.state = {
-            taskId: 0,
-            newName: '',
-            newDate: new Date()
+            newName: 'A name for your task',
+            newDate: new Date(),
+            newCategory: ''
         }
 
         this.updateNewName = this.updateNewName.bind(this)
         this.updateTaskList = this.updateTaskList.bind(this)
         this.updateNewDate = this.updateNewDate.bind(this)
+        this.updateNewCategory = this.updateNewCategory.bind(this)
     }
 
     updateNewName(e) {
@@ -28,20 +30,27 @@ class AddTask extends Component {
         })
     }
 
+    updateNewCategory(category) {
+        this.setState({
+            newCategory: category
+        })
+    }
+
     updateNewDate = date => this.setState({ newDate: date })
 
     updateTaskList() {
         this.props.addNew({
-            taskId: this.state.taskId,
+            taskId: this.props.taskId,
             name: this.state.newName,
-            date: this.state.newDate
+            date: this.state.newDate,
+            category: this.state.newCategory
         })
 
         this.setState(prevState => {
             return {
-                taskId: prevState.taskId + 1,
                 newName: '',
-                newDate: new Date()
+                newDate: new Date(),
+                newCategory: ''
             }
         })
     }
@@ -60,6 +69,9 @@ class AddTask extends Component {
                     onChange={this.updateNewDate}
                 />
                 <br/>
+                <CategoryPicker
+                    updateCategory={this.updateNewCategory}
+                />
                 <button onClick={this.updateTaskList}> Add Task </button>
             </div>
         )

@@ -11,14 +11,18 @@ class TaskList extends Component {
                     {this.props.tasks.map((task) => {
                         return (
                             <div className={this.props.isCompleted ? "completed" : "task"}>
-                                <input
-                                    type="checkbox" 
-                                    onChange={() => {this.props.toggleCheckbox(task)}} 
-                                    checked={this.props.isCompleted}
-                                />
                                 <p>{'Task: ' + task.name}</p>
                                 <p>{'Due:  ' + task.date}</p>
-                                <hr width="100%"/>
+                                <p>{'Category: ' + task.category}</p>
+                                <input
+                                    type="checkbox"
+                                    onChange={() => { this.props.toggleCheckbox(task) }}
+                                    checked={this.props.isCompleted}
+                                />
+                                <div onClick={() => { this.props.deleteTask(task) }}>
+                                    <i class="material-icons">delete</i>
+                                </div>
+                                <hr width="100%" />
                             </div>
                         )
                     })}
