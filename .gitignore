@@ -1,5 +1,5 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
-
+.gitignore
 # dependencies
 /client/node_modules
 /node_modules

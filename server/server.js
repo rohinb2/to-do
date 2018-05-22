@@ -5,7 +5,7 @@ const http = require('http');
 const url = require('url');
 
 const app = express();
-var routes = require('./routes.js');
+var routes = require('../routes/routes.js');
 
 const server = http.createServer(app);
 
