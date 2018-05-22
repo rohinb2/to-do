@@ -57,7 +57,7 @@ class AddTask extends Component {
 
     render() {
         return (
-            <div class="addTaskBox">
+            <div className="addTaskBox">
                 <input
                     type="text"
                     value={this.state.newName}

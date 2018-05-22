@@ -14,13 +14,17 @@ class TaskList extends Component {
                                 <p>{'Task: ' + task.name}</p>
                                 <p>{'Due:  ' + task.date}</p>
                                 <p>{'Category: ' + task.category}</p>
-                                <input
-                                    type="checkbox"
-                                    onChange={() => { this.props.toggleCheckbox(task) }}
-                                    checked={this.props.isCompleted}
-                                />
-                                <div onClick={() => { this.props.deleteTask(task) }}>
-                                    <i class="material-icons">delete</i>
+                                <div className="last-row">
+                                    <input
+                                        type="checkbox"
+                                        onChange={() => { this.props.toggleCheckbox(task) }}
+                                        checked={this.props.isCompleted}
+                                    />
+                                </div>
+                                <div 
+                                className="last-row"
+                                onClick={() => { this.props.deleteTask(task) }}>
+                                    <i className="material-icons">delete</i>
                                 </div>
                                 <hr width="100%" />
                             </div>

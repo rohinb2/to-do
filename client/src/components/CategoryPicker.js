@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-dropdown'
 import AddCategory from './AddCategory'
+require('../static/css/CategoryPicker.css')
 
 class CategoryPicker extends Component {
 

@@ -9,6 +9,10 @@ ul {
     text-align: left;
 }
 
+.last-row {
+    display: inline-block;
+}
+
 .completed {
     width: 500px;
     margin: 0 auto;
