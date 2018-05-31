@@ -3,6 +3,7 @@ import logo from './assets/images/logo.svg';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import TodoContainer from './components/TodoContainer'
+import SignInPage from './components/SignInPage';
 
 class App extends Component {
 
@@ -10,26 +11,26 @@ class App extends Component {
     super(props);
 
     this.state = {
-      response: ''
+      response: 'Your To Do App'
     }
 
   }
 
-  componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.express }))
-      .catch(err => console.log(err));
-  }
+  // componentDidMount() {
+  //   this.callApi()
+  //     .then(res => this.setState({ response: res.express }))
+  //     .catch(err => console.log(err));
+  // }
 
-  callApi = async () => {
-    const response = await fetch('/api/hello');
-    const body = await response.json();
+  // callApi = async () => {
+  //   const response = await fetch('/api/hello');
+  //   const body = await response.json();
 
-    if (response.status !== 200) throw Error(body.message);
+  //   if (response.status !== 200) throw Error(body.message);
 
-    return body;
+  //   return body;
 
-  }
+  // }
 
   render() {
     return (
@@ -39,6 +40,7 @@ class App extends Component {
           <h1 className="App-title">{this.state.response}</h1>
         </header>
         <MuiThemeProvider>
+          <SignInPage />
           <TodoContainer/>
         </MuiThemeProvider>
       </div>

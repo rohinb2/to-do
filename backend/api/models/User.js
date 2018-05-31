@@ -13,8 +13,19 @@ var User = new Schema({
         })]},
     first: String,
     last: String,
-    tasks: [{ type: Schema.Types.ObjectId, ref: 'Task'}],
-    categories: [String]
+    tasks: [{
+        taskId: { type: Number, min: 0 },
+        name: String,
+        date: Date,
+        category: String
+    }],
+    completedTasks: [{
+        taskId: { type: Number, min: 0 },
+        name: String,
+        date: Date,
+        category: String
+    }],
+    categories: [Schema.Types.Mixed]
 });
 
 // Passport local mongoose is a library that simplifies passport's password hashing

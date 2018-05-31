@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 var uri = process.env.MONGODB_URI;
-console.log(uri);
 mongoose.connect(uri, function(err, res) {
     if (err) {
         console.log('Error connecting to MongoDB.')

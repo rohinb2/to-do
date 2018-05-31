@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import CategoryPicker from './CategoryPicker'
+import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 require('../static/css/AddTask.css')
 "use strict";
@@ -22,6 +24,7 @@ class AddTask extends Component {
         this.updateTaskList = this.updateTaskList.bind(this)
         this.updateNewDate = this.updateNewDate.bind(this)
         this.updateNewCategory = this.updateNewCategory.bind(this)
+        this.apiCall = this.apiCall.bind(this)
     }
 
     updateNewName(e) {
@@ -46,6 +49,8 @@ class AddTask extends Component {
             category: this.state.newCategory
         })
 
+        this.apiCall();
+
         this.setState(prevState => {
             return {
                 newName: '',
@@ -53,6 +58,29 @@ class AddTask extends Component {
                 newCategory: ''
             }
         })
+    }
+
+    apiCall = () => {
+        // const request = {
+        //     credentials: 'include',
+        //     mode: 'cors',
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(this.state)
+        // }
+        // const response = await fetch('/api/createtask/', request);
+        const config = {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+
+        axios.post('/api/createtask/', this.state, config)
+            .then(res => console.log('axios', res))
+            .catch(err => console.log('axios', err))
     }
 
     render() {

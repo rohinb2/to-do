@@ -4,27 +4,38 @@
 const express = require('express');
 const http = require('http');
 const url = require('url');
+const logger = require('morgan');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const Session = require('express-session');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')({session: session});
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const app = express();
 const routes = require('./api/routes');
 
-// Endpoints
+// Body Parser and Cookie Parser for handling requests
+app.use(logger('dev'))
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.use('/api', routes);
+app.use(cookieParser());
 
-// Setting up a session
-app.use(Session({
-    secret: 'asdlfkaj320',
+// app.use(function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+//     res.header("Access-Control-Allow-Credentials", true);
+//     next();
+// });
+
+// Setting up a session for cookies (can be switched to JwT later)
+app.use(session({
+    secret: 'adf2f34',
     resave: true,
     saveUninitialized: false
-}))
+}));
 
 // Add passport for User Authentication
 app.use(passport.initialize());
@@ -34,6 +45,11 @@ var User = require('./api/models/User')
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use(cors());
+
+// Add our routes
+app.use('/api', routes);
 
 const mongoDB = require('./api/config/database')
 
