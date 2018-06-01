@@ -11,7 +11,7 @@ class SignInPage extends Component {
 
         this.onUsernameChange = this.onUsernameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.loginRequest = this.loginRequest.bind(this);
     }
 
     onUsernameChange(event) {
@@ -22,43 +22,30 @@ class SignInPage extends Component {
         this.setState({ password: event.target.value });
     }
 
-    handleSubmit = async () => {
-
+    loginRequest = async (e) => {
+        e.preventDefault();
         const request = {
             credentials: 'include',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin':'*',
-                'Accept': 'application/json'
             },
-            mode: 'cors',
             body: JSON.stringify(this.state)
         }
 
         const response = await fetch('/api/login/', request);
     }
 
-    // handleSubmit() {
-    //     var xmlHttp = new XMLHttpRequest();
-    //     xmlHttp.open('POST', 'api/login', true);
-    //     xmlHttp.setRequestHeader('Content-Type', 'application/json');
-    //     xmlHttp.send(JSON.stringify({
-    //         username: 'rohin',
-    //         password: '123456789'
-    //     }))
-    // }
-
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.loginRequest}>
                 <label>
                     Username:
-                    <input type="text" value={this.state.username} onChange={this.onUsernameChange} />
+                    <input type="text" value={this.state.username} onChange={this.onUsernameChange} /><br/>
                     Password:
-                    <input type="password" value={this.state.password} onChange={this.onPasswordChange} />
+                    <input type="password" value={this.state.password} onChange={this.onPasswordChange} /><br/>
                 </label>
-                <input type="submit" value="Submit" />
+                <input type="submit" value="Login" />
             </form>
         );
     }

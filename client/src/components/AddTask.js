@@ -24,7 +24,7 @@ class AddTask extends Component {
         this.updateTaskList = this.updateTaskList.bind(this)
         this.updateNewDate = this.updateNewDate.bind(this)
         this.updateNewCategory = this.updateNewCategory.bind(this)
-        this.apiCall = this.apiCall.bind(this)
+        this.addTaskRequest = this.addTaskRequest.bind(this)
     }
 
     updateNewName(e) {
@@ -49,7 +49,7 @@ class AddTask extends Component {
             category: this.state.newCategory
         })
 
-        this.apiCall();
+        this.addTaskRequest();
 
         this.setState(prevState => {
             return {
@@ -60,27 +60,19 @@ class AddTask extends Component {
         })
     }
 
-    apiCall = () => {
-        // const request = {
-        //     credentials: 'include',
-        //     mode: 'cors',
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(this.state)
-        // }
-        // const response = await fetch('/api/createtask/', request);
-        const config = {
-            withCredentials: true,
+    addTaskRequest = async () => {
+        const request = {
+            credentials: 'include',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            }
-        };
+                'Access-Control-Allow-Origin': '*',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(this.state)
+        }
+        const response = await fetch('/api/createtask/', request);
 
-        axios.post('/api/createtask/', this.state, config)
-            .then(res => console.log('axios', res))
-            .catch(err => console.log('axios', err))
     }
 
     render() {

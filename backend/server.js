@@ -8,7 +8,6 @@ const logger = require('morgan');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
-const MongoStore = require('connect-mongo')({session: session});
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -23,12 +22,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-
-// app.use(function (req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-//     res.header("Access-Control-Allow-Credentials", true);
-//     next();
-// });
 
 // Setting up a session for cookies (can be switched to JwT later)
 app.use(session({
@@ -46,6 +39,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Cross Origin Resource Sharing
 app.use(cors());
 
 // Add our routes
@@ -62,11 +56,14 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
+    
     // render the error page
     res.status(err.status || 500);
+    next();
 });
 
 // Start server
