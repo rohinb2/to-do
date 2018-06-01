@@ -9,32 +9,20 @@ Container for most of the app - contains the list of tasks and place to add more
 class TodoContainer extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             tasks: [],
-            taskId: 0,
             completedTasks: [],
             showAddTask: false
         }
 
-        this.addTask = this.addTask.bind(this)
-        this.completeTask = this.completeTask.bind(this)
-        this.uncompleteTask = this.uncompleteTask.bind(this)
-        this.getIndexOfTask = this.getIndexOfTask.bind(this)
-        this.newTask = this.newTask.bind(this)
-        this.deleteTask = this.deleteTask.bind(this)
-    }
-
-    // Adds the latest task to the end
-    addTask(t) {
-        this.setState(prevState => {
-            return {
-                tasks: this.state.tasks.concat([t]),
-                showAddTask: false,
-                taskId: prevState.taskId + 1
-            }
-        })
+        this.completeTask = this.completeTask.bind(this);
+        this.uncompleteTask = this.uncompleteTask.bind(this);
+        this.newTask = this.newTask.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
+        this.getTasks = this.getTasks.bind(this);
+        this.getCompletedTasks = this.getCompletedTasks.bind(this);
     }
     
     newTask() {
@@ -43,68 +31,78 @@ class TodoContainer extends Component {
         })
     }
 
-    // Finds the task in the array of non-completed tasks, removes it and moves it to completed tasks
-    completeTask(t) {
-        var index = this.getIndexOfTask(t, this.state.tasks);
-
-        this.setState({
-            completedTasks: this.state.completedTasks.concat([this.state.tasks[index]])
-        })
-
-        // Uses a callback to use the previous state to set this state
-        this.setState(prevState => {
-            let newTasks = prevState.tasks.slice()
-            newTasks.splice(index, 1)
-            return {tasks : newTasks}
-        })
-
-    }
-
     // Deletes task from either completed or uncompleted tasks
-    deleteTask(t) {
-        var index = this.getIndexOfTask(t, this.state.tasks);
-        if (index != -1) {
-            this.setState(prevState => {
-                let newTasks = prevState.tasks.slice()
-                newTasks.splice(index, 1)
-                return { tasks: newTasks }
-            })
-
-        } else {
-            index = this.getIndexOfTask(t, this.state.completedTasks);
-            
-            this.setState(prevState => {
-                let newCompletedTasks = prevState.completedTasks.slice()
-                newCompletedTasks.splice(index, 1)
-                return { completedTasks: newCompletedTasks }
-            })
+    deleteTask = async (t) => {
+        const request = {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(t)
         }
 
+        const response = await fetch('/api/deletetask/', request);
     }
 
-    // Loops through the array and finds the object with the right taskId
-    getIndexOfTask(t, arr) {
-        for (var i = 0; i < arr.length; i++) {
-            if (arr[i].taskId == t.taskId) {
-                return i;
-            }
+    // Finds the task in the array of non-completed tasks, removes it and moves it to completed tasks
+    completeTask = async (t) => {
+        const request = {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(t)
         }
-        return -1;
+
+        const response = await fetch('/api/completetask/', request);
+
     }
 
     // Finds the task in the array of completed task and makes it uncomplete
-    uncompleteTask(t) {
-        var index = this.getIndexOfTask(t, this.state.completedTasks);
+    uncompleteTask = async (t) => {
+        const request = {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(t)
+        }
 
+        const response = await fetch('/api/uncompletetask/', request);
+    }
+
+    componentWillUpdate = async () => {
+        var taskArray = await this.getTasks();
+        var completedTaskArray = await this.getCompletedTasks();
         this.setState({
-            tasks: this.state.tasks.concat([this.state.completedTasks[index]])
+            tasks: taskArray,
+            completedTasks: completedTaskArray
         })
-        
-        this.setState(prevState => {
-            let newCompletedTasks = prevState.completedTasks.slice()
-            newCompletedTasks.splice(index, 1)
-            return { completedTasks: newCompletedTasks }
-        })
+    }
+
+    getTasks = async () => {
+        const request = {
+            credentials: 'include',
+            method: 'GET',
+        }
+
+        const response = await fetch('/api/gettasks/', request);
+        const body = await response.json();
+        return body;
+    }
+
+    getCompletedTasks = async () => {
+        const request = {
+            credentials: 'include',
+            method: 'GET',
+        }
+
+        const response = await fetch('/api/getcompletedtasks/', request);
+        const body = await response.json();
+        return body;
     }
 
     render() {
@@ -123,7 +121,7 @@ class TodoContainer extends Component {
             <div>
 
                 {this.state.showAddTask ? 
-                <AddTask addNew={this.addTask} taskId={this.state.taskId} /> : 
+                <AddTask /> : 
                 <button onClick={this.newTask}> New Task </button>}
 
                 <h3>Your Tasks</h3>

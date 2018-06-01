@@ -1,5 +1,9 @@
+"use strict";
 import React, { Component } from 'react';
 
+/*
+A component for registering a user with the inputted details.
+*/
 class SignUpPage extends Component {
 
     constructor(props) {

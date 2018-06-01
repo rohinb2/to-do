@@ -27,6 +27,7 @@ router.post('/deletetask', Auth.loggedIn, UserController.deleteTask);
 router.post('/completetask', Auth.loggedIn, UserController.completeTask);
 router.post('/uncompletetask', Auth.loggedIn, UserController.uncompleteTask);
 router.get('/gettasks', Auth.loggedIn, UserController.getTaskArray);
+router.get('/getcompletedtasks', Auth.loggedIn, UserController.getCompletedTaskArray);
 
 // Category related endpoints
 router.post('/addcategory', Auth.loggedIn, UserController.addCategory);

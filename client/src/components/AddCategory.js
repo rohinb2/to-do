@@ -1,30 +1,48 @@
+"use strict";
 import React, { Component } from 'react';
-import RaisedButton from 'material-ui/RaisedButton'
 
+/*
+A component for adding a category to the current User's list of categories.
+*/
 class AddCategory extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            newCategory: ''
+            category: ''
         }
 
-        this.updateNewCategory = this.updateNewCategory.bind(this);
+        this.updateCategory = this.updateCategory.bind(this);
         this.updateCategoryList = this.updateCategoryList.bind(this);
+        this.addCategoryRequest = this.addCategoryRequest.bind(this);
     }
 
-    updateNewCategory(e) {
+    updateCategory(e) {
         this.setState({
-            newCategory: e.target.value
+            category: e.target.value
         })
     }
 
     updateCategoryList() {
-        this.props.addCategory(this.state.newCategory);
+        this.addCategoryRequest();
         this.setState({
-            newCategory: ''
+            category: ''
         })
+    }
+
+    addCategoryRequest = async () => {
+        const request = {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(this.state)
+        }
+        const response = await fetch('/api/addcategory/', request);
     }
 
     render() {
@@ -32,8 +50,8 @@ class AddCategory extends Component {
             <div>
                 <input
                 type="text"
-                value={this.state.newCategory}
-                onChange={this.updateNewCategory}
+                value={this.state.category}
+                onChange={this.updateCategory}
                 />
                 <button onClick={this.updateCategoryList}>Add Category</button>
             </div>

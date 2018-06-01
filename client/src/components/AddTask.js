@@ -1,11 +1,10 @@
+"use strict";
+
 import React, { Component } from 'react';
 import DateTimePicker from 'react-datetime-picker';
 import CategoryPicker from './CategoryPicker'
-import axios from 'axios';
-axios.defaults.withCredentials = true;
 
 require('../static/css/AddTask.css')
-"use strict";
 
 /*
 Component for adding a new task with a name and a date.
@@ -15,47 +14,39 @@ class AddTask extends Component {
         super(props)
 
         this.state = {
-            newName: 'A name for your task',
-            newDate: new Date(),
-            newCategory: ''
+            name: 'A name for your task',
+            date: new Date(),
+            category: ''
         }
 
-        this.updateNewName = this.updateNewName.bind(this)
+        this.updateName = this.updateName.bind(this)
         this.updateTaskList = this.updateTaskList.bind(this)
-        this.updateNewDate = this.updateNewDate.bind(this)
-        this.updateNewCategory = this.updateNewCategory.bind(this)
+        this.updateDate = this.updateDate.bind(this)
+        this.updateCategory = this.updateCategory.bind(this)
         this.addTaskRequest = this.addTaskRequest.bind(this)
     }
 
-    updateNewName(e) {
+    updateName(e) {
         this.setState({
-            newName: e.target.value
+            name: e.target.value
         })
     }
 
-    updateNewCategory(category) {
+    updateCategory(category) {
         this.setState({
-            newCategory: category
+            category: category
         })
     }
 
-    updateNewDate = date => this.setState({ newDate: date })
+    updateDate = date => this.setState({ date: date })
 
     updateTaskList() {
-        this.props.addNew({
-            taskId: this.props.taskId,
-            name: this.state.newName,
-            date: this.state.newDate,
-            category: this.state.newCategory
-        })
-
         this.addTaskRequest();
-
         this.setState(prevState => {
             return {
-                newName: '',
-                newDate: new Date(),
-                newCategory: ''
+                name: '',
+                date: new Date(),
+                category: ''
             }
         })
     }
@@ -80,17 +71,17 @@ class AddTask extends Component {
             <div className="addTaskBox">
                 <input
                     type="text"
-                    value={this.state.newName}
-                    onChange={this.updateNewName}
+                    value={this.state.name}
+                    onChange={this.updateName}
                 />
                 <br/>
                 <DateTimePicker
-                    value={this.state.newDate}
-                    onChange={this.updateNewDate}
+                    value={this.state.date}
+                    onChange={this.updateDate}
                 />
                 <br/>
                 <CategoryPicker
-                    updateCategory={this.updateNewCategory}
+                    updateCategory={this.updateCategory}
                 />
                 <button onClick={this.updateTaskList}> Add Task </button>
             </div>

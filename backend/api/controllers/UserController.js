@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const UserControllerHelpers = require('./UserControllerHelpers');
 const passport = require('passport');
 
 module.exports.register = function(req, res, next) {
@@ -46,39 +47,36 @@ module.exports.addCategory = function(req, res, next) {
 }
 
 module.exports.createTask = function (req, res, next) {
-
-    var taskObj = {
-        taskId: req.body.taskId,
-        name: req.body.name,
-        date: req.body.date,
-        category: req.body.category
-    }
-
-    User.findOneAndUpdate(
-        { username: req.user.username },
-        { $push: { tasks: taskObj } }, function (err, succ) {
-            if (err) {
-                console.log(err);
-            }
-        });
+    UserControllerHelpers.addToUserTasks(req.user, req.body);
+    res.sendStatus(200);
 }
 
 module.exports.deleteTask = function (req, res, next) {
-    // TODO:
+    UserControllerHelpers.removeFromUserTasks(req.user, req.body);
+    UserControllerHelpers.removeFromUserCompletedTasks(req.user, req.body);
+    res.sendStatus(200);
 }
 
 module.exports.completeTask = function (req, res, next) {
-    // TODO:
+    UserControllerHelpers.removeFromUserTasks(req.user, req.body);
+    UserControllerHelpers.addToUserCompletedTasks(req.user, req.body);
+    res.sendStatus(200);
 }
 
 module.exports.uncompleteTask = function (req, res, next) {
-    // TODO:
+    UserControllerHelpers.removeFromUserCompletedTasks(req.user, req.body);
+    UserControllerHelpers.addToUserCompletedTasks(req.user, req.body);
+    res.sendStatus(200);
 }
 
 module.exports.getTaskArray = function(req, res, next) {
-    // TODO:
+    res.send(req.user.tasks);
+}
+
+module.exports.getCompletedTaskArray = function(req, res, next) {
+    res.send(req.user.completedTasks);
 }
 
 module.exports.getCategoryArray = function(req, res, next) {
-    // TODO:
+    res.send(req.user.categories);
 }

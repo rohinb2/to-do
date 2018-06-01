@@ -1,5 +1,9 @@
+"use strict";
 import React, { Component } from 'react';
 
+/*
+A component for logging in with the inputted username and password.
+*/
 class SignInPage extends Component {
 
     constructor(props) {
