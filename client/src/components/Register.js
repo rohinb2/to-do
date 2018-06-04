@@ -1,10 +1,9 @@
-"use strict";
 import React, { Component } from 'react';
 
 /*
-A component for registering a user with the inputted details.
+A component for Registering a user with the inputted details.
 */
-class SignUpPage extends Component {
+class Register extends Component {
 
     constructor(props) {
         super(props);
@@ -21,7 +20,7 @@ class SignUpPage extends Component {
         this.onEmailChange = this.onEmailChange.bind(this);
         this.onFirstChange = this.onFirstChange.bind(this);
         this.onLastChange = this.onLastChange.bind(this);
-        this.signupRequest = this.signupRequest.bind(this);
+        this.registerRequest = this.registerRequest.bind(this);
     }
 
     onUsernameChange(event) {
@@ -44,7 +43,7 @@ class SignUpPage extends Component {
         this.setState({ last: event.target.value });
     }
 
-    signupRequest = async (e) => {
+    registerRequest = async (e) => {
         e.preventDefault();
         const request = {
             credentials: 'include',
@@ -56,11 +55,14 @@ class SignUpPage extends Component {
         }
 
         const response = await fetch('/api/register/', request);
+        setTimeout(() => {
+            window.location = '/login';
+        }, 100);
     }
 
     render() {
         return (
-            <form onSubmit={this.signupRequest}>
+            <form onSubmit={this.registerRequest}>
                 <label>
                     Username:
                     <input type="text" value={this.state.username} onChange={this.onUsernameChange} /><br />
@@ -79,4 +81,4 @@ class SignUpPage extends Component {
     }
 }
 
-export default SignUpPage;
+export default Register;

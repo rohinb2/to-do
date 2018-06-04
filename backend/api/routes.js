@@ -20,6 +20,7 @@ router.get('/hello', function(req, res) {
 router.post('/register', UserController.register);
 router.post('/login', UserController.login);
 router.post('/logout', UserController.logout);
+router.get('/checkauth', Auth.loggedIn, UserController.checkStatus);
 
 // Task related endpoints
 router.post('/createtask', Auth.loggedIn, UserController.createTask);

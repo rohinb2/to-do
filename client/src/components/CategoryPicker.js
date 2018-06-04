@@ -1,5 +1,3 @@
-"use strict";
-
 import React, { Component } from 'react';
 import Dropdown from 'react-dropdown'
 import AddCategory from './AddCategory'
@@ -36,9 +34,10 @@ class CategoryPicker extends Component {
     }
 
     componentDidMount = async () => {
+        console.log("Updating categories");
         var categoryObjArray = await this.getCategories();
         var categoryArray = [];
-        
+
         for (var i = 0; i < categoryObjArray.length; i++) {
             categoryArray.push(categoryObjArray[i].category);
         }

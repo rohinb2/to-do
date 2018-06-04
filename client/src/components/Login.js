@@ -1,10 +1,9 @@
-"use strict";
 import React, { Component } from 'react';
-
+import { Link } from 'react-router-dom'
 /*
 A component for logging in with the inputted username and password.
 */
-class SignInPage extends Component {
+class Login extends Component {
 
     constructor(props) {
         super(props);
@@ -38,21 +37,25 @@ class SignInPage extends Component {
         }
 
         const response = await fetch('/api/login/', request);
+        setTimeout(window.location.reload(), 100);
     }
 
     render() {
         return (
-            <form onSubmit={this.loginRequest}>
-                <label>
-                    Username:
-                    <input type="text" value={this.state.username} onChange={this.onUsernameChange} /><br/>
-                    Password:
-                    <input type="password" value={this.state.password} onChange={this.onPasswordChange} /><br/>
-                </label>
-                <input type="submit" value="Login" />
-            </form>
+            <div>
+                <form onSubmit={this.loginRequest}>
+                    <label>
+                        Username:
+                        <input type="text" value={this.state.username} onChange={this.onUsernameChange} /><br/>
+                        Password:
+                        <input type="password" value={this.state.password} onChange={this.onPasswordChange} /><br/>
+                    </label>
+                    <input type="submit" value="Login" />
+                </form>
+                <Link to='/register'>Sign Up Here! </Link>
+            </div>
         );
     }
 }
 
-export default SignInPage;
+export default Login;

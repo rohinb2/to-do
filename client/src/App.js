@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import logo from './assets/images/logo.svg';
-import './App.css';
+import './static/css/App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import TodoContainer from './components/TodoContainer'
-import SignInPage from './components/SignInPage';
-import SignUpPage from './components/SignUpPage';
+import Routes from './routes'
 
 class App extends Component {
 
@@ -25,9 +23,7 @@ class App extends Component {
           <h1 className="App-title">{this.state.title}</h1>
         </header>
         <MuiThemeProvider>
-          <SignUpPage />
-          <SignInPage />
-          <TodoContainer/>
+          <Routes />
         </MuiThemeProvider>
       </div>
     );

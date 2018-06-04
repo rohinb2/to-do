@@ -1,4 +1,3 @@
-"use strict";
 import React, { Component } from 'react';
 
 /*
@@ -42,7 +41,6 @@ class AddCategory extends Component {
             },
             body: JSON.stringify(this.state)
         }
-        const response = await fetch('/api/addcategory/', request);
     }
 
     render() {

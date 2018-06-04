@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import AddTask from './AddTask'
 import TaskList from './TaskList'
 
-"use strict"
 /* 
 Container for most of the app - contains the list of tasks and place to add more tasks.
 */
@@ -23,6 +22,7 @@ class TodoContainer extends Component {
         this.deleteTask = this.deleteTask.bind(this);
         this.getTasks = this.getTasks.bind(this);
         this.getCompletedTasks = this.getCompletedTasks.bind(this);
+        this.logout = this.logout.bind(this);
     }
     
     newTask() {
@@ -83,6 +83,15 @@ class TodoContainer extends Component {
         })
     }
 
+    componentWillMount = async () => {
+        var taskArray = await this.getTasks();
+        var completedTaskArray = await this.getCompletedTasks();
+        this.setState({
+            tasks: taskArray,
+            completedTasks: completedTaskArray
+        })
+    }
+
     getTasks = async () => {
         const request = {
             credentials: 'include',
@@ -103,6 +112,16 @@ class TodoContainer extends Component {
         const response = await fetch('/api/getcompletedtasks/', request);
         const body = await response.json();
         return body;
+    }
+
+    logout = async () => {
+        const request = {
+            credentials: 'include',
+            method: 'POST',
+        }
+
+        const response = await fetch('/api/logout', request);
+        setTimeout(window.location.reload(), 100);
     }
 
     render() {
@@ -128,6 +147,8 @@ class TodoContainer extends Component {
                 <TaskList tasks={this.state.tasks} toggleCheckbox={this.completeTask} isCompleted={false} deleteTask={this.deleteTask} />
                 <h3>Completed Tasks</h3>
                 <TaskList tasks={this.state.completedTasks} toggleCheckbox={this.uncompleteTask} isCompleted={true} deleteTask={this.deleteTask} />
+
+                <button onClick={this.logout}> Logout </button>
             </div>
         )
     }

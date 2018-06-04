@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-"use strict";
 require("../static/css/TaskList.css")
 
 class TaskList extends Component {

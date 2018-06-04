@@ -80,3 +80,7 @@ module.exports.getCompletedTaskArray = function(req, res, next) {
 module.exports.getCategoryArray = function(req, res, next) {
     res.send(req.user.categories);
 }
+
+module.exports.checkStatus = function(req, res, next) {
+    res.send(200);
+}
