@@ -31,7 +31,9 @@ module.exports.login = function(req, res, next) {
 
 module.exports.logout = function(req, res, next) {
     req.logout();
+    req.session.destroy();
     res.sendStatus(200);
+    res.redirect('/');
 }
 
 module.exports.addCategory = function(req, res, next) {

@@ -60,7 +60,10 @@ class AddTask extends Component {
             },
             body: JSON.stringify(this.state)
         }
-        const response = await fetch('/api/createtask/', request);
+
+        fetch('/api/createtask/', request).then((response) => {
+            this.props.refresh();
+        });
 
     }
 

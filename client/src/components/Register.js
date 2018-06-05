@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 /*
 A component for Registering a user with the inputted details.
@@ -10,6 +12,7 @@ class Register extends Component {
         this.state = {
             username: '',
             password: '',
+            verifyPassword: '',
             email: '',
             first: '',
             last: ''
@@ -17,6 +20,7 @@ class Register extends Component {
 
         this.onUsernameChange = this.onUsernameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.onVerifyPasswordChange = this.onVerifyPasswordChange.bind(this);
         this.onEmailChange = this.onEmailChange.bind(this);
         this.onFirstChange = this.onFirstChange.bind(this);
         this.onLastChange = this.onLastChange.bind(this);
@@ -29,6 +33,10 @@ class Register extends Component {
 
     onPasswordChange(event) {
         this.setState({ password: event.target.value });
+    }
+    
+    onVerifyPasswordChange(event) {
+        this.setState({ verifyPassword : event.target.value });
     }
 
     onEmailChange(event) {
@@ -45,6 +53,33 @@ class Register extends Component {
 
     registerRequest = async (e) => {
         e.preventDefault();
+
+        // Check if any of the fields are ekpty
+        for (var key in this.state) {
+            if (this.state.hasOwnProperty(key) && this.state[key] == '') {
+                toast.error('The ' + key + ' field is empty.', { position: toast.POSITION.TOP_CENTER });
+                return;
+            }
+        }
+
+        // Check if the password is too short
+        if (this.state.password.length < 8) {
+            toast.error('Please input a password of at least 8 characters', { position: toast.POSITION.TOP_CENTER });
+            return;
+        }
+
+        // Check if the verify password is the same as the current password
+        if (this.state.password !== this.state.verifyPassword) {
+            toast.error('Your passwords do not match.', { position: toast.POSITION.TOP_CENTER });
+            return;
+        }
+
+        // Check if email is actually an email
+        if (!this.state.email.includes('@')) {
+            toast.error('Please enter a valid email.', { position: toast.POSITION.TOP_CENTER });
+            return;
+        }
+
         const request = {
             credentials: 'include',
             method: 'POST',
@@ -54,29 +89,39 @@ class Register extends Component {
             body: JSON.stringify(this.state)
         }
 
-        const response = await fetch('/api/register/', request);
-        setTimeout(() => {
-            window.location = '/login';
-        }, 100);
+        fetch('/api/register/', request).then((response) => {
+            if (response.status == 302) {
+                setTimeout(() => {
+                    window.location = '/login';
+                }, 100);
+            } else if (response.status == 404) {
+                toast.error('There is already a user registered with this username.', { position: toast.POSITION.TOP_CENTER });
+            }
+        });
     }
 
     render() {
         return (
-            <form onSubmit={this.registerRequest}>
-                <label>
-                    Username:
-                    <input type="text" value={this.state.username} onChange={this.onUsernameChange} /><br />
-                    Password:
-                    <input type="password" value={this.state.password} onChange={this.onPasswordChange} /><br />
-                    Email:
-                    <input type="text" value={this.state.email} onChange={this.onEmailChange} /><br />
-                    First Name:
-                    <input type="text" value={this.state.first} onChange={this.onFirstChange} /><br />
-                    Last Name:
-                    <input type="text" value={this.state.last} onChange={this.onLastChange} /><br />
-                </label>
-                <input type="submit" value="Sign Up" />
-            </form>
+            <div>
+                <form onSubmit={this.registerRequest}>
+                    <label>
+                        Username:
+                        <input type="text" value={this.state.username} onChange={this.onUsernameChange} /><br />
+                        Password:
+                        <input type="password" value={this.state.password} onChange={this.onPasswordChange} /><br />
+                        Retype Password:
+                        <input type="password" value={this.state.verifyPassword} onChange={this.onVerifyPasswordChange} /><br />
+                        Email:
+                        <input type="text" value={this.state.email} onChange={this.onEmailChange} /><br />
+                        First Name:
+                        <input type="text" value={this.state.first} onChange={this.onFirstChange} /><br />
+                        Last Name:
+                        <input type="text" value={this.state.last} onChange={this.onLastChange} /><br />
+                    </label>
+                    <input type="submit" value="Sign Up" />
+                </form>
+                <ToastContainer />
+            </div>
         );
     }
 }

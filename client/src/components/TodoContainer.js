@@ -13,7 +13,8 @@ class TodoContainer extends Component {
         this.state = {
             tasks: [],
             completedTasks: [],
-            showAddTask: false
+            showAddTask: false,
+            refreshBool: false
         }
 
         this.completeTask = this.completeTask.bind(this);
@@ -23,6 +24,16 @@ class TodoContainer extends Component {
         this.getTasks = this.getTasks.bind(this);
         this.getCompletedTasks = this.getCompletedTasks.bind(this);
         this.logout = this.logout.bind(this);
+        this.refresh = this.refresh.bind(this);
+    }
+
+    refresh = async () => {
+        var taskArray = await this.getTasks();
+        var completedTaskArray = await this.getCompletedTasks();
+        this.setState({
+            tasks: taskArray,
+            completedTasks: completedTaskArray
+        });
     }
     
     newTask() {
@@ -42,7 +53,9 @@ class TodoContainer extends Component {
             body: JSON.stringify(t)
         }
 
-        const response = await fetch('/api/deletetask/', request);
+        fetch('/api/deletetask/', request).then((response) => {
+            this.refresh();
+        });
     }
 
     // Finds the task in the array of non-completed tasks, removes it and moves it to completed tasks
@@ -56,7 +69,9 @@ class TodoContainer extends Component {
             body: JSON.stringify(t)
         }
 
-        const response = await fetch('/api/completetask/', request);
+        fetch('/api/completetask/', request).then((response) => {
+            this.refresh();
+        });
 
     }
 
@@ -71,26 +86,15 @@ class TodoContainer extends Component {
             body: JSON.stringify(t)
         }
 
-        const response = await fetch('/api/uncompletetask/', request);
-    }
-
-    componentWillUpdate = async () => {
-        var taskArray = await this.getTasks();
-        var completedTaskArray = await this.getCompletedTasks();
-        this.setState({
-            tasks: taskArray,
-            completedTasks: completedTaskArray
-        })
+        fetch('/api/uncompletetask/', request).then((response) => {
+            this.refresh();
+        });
     }
 
     componentWillMount = async () => {
-        var taskArray = await this.getTasks();
-        var completedTaskArray = await this.getCompletedTasks();
-        this.setState({
-            tasks: taskArray,
-            completedTasks: completedTaskArray
-        })
+        this.refresh();
     }
+
 
     getTasks = async () => {
         const request = {
@@ -140,7 +144,7 @@ class TodoContainer extends Component {
             <div>
 
                 {this.state.showAddTask ? 
-                <AddTask /> : 
+                <AddTask refresh={this.refresh} /> : 
                 <button onClick={this.newTask}> New Task </button>}
 
                 <h3>Your Tasks</h3>
@@ -149,6 +153,7 @@ class TodoContainer extends Component {
                 <TaskList tasks={this.state.completedTasks} toggleCheckbox={this.uncompleteTask} isCompleted={true} deleteTask={this.deleteTask} />
 
                 <button onClick={this.logout}> Logout </button>
+                <button onClick={this.refresh}> Refresh </button>
             </div>
         )
     }

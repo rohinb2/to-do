@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+
 /*
 A component for logging in with the inputted username and password.
 */
@@ -7,6 +10,7 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
+        
         this.state = {
             username: '',
             password: ''
@@ -36,9 +40,15 @@ class Login extends Component {
             body: JSON.stringify(this.state)
         }
 
-        const response = await fetch('/api/login/', request);
-        setTimeout(window.location.reload(), 100);
-    }
+        // Toast if failed login, refresh to go to home page if login succeeded.
+        fetch('/api/login/', request).then((response) => {
+            if (response.status == 200) {
+                setTimeout(window.location.reload(), 100);
+            } else if (response.status == 401) {
+                toast.error('Could not find inputted username and password.', { position: toast.POSITION.TOP_CENTER });
+            }
+        });
+     }
 
     render() {
         return (
@@ -53,6 +63,7 @@ class Login extends Component {
                     <input type="submit" value="Login" />
                 </form>
                 <Link to='/register'>Sign Up Here! </Link>
+                <ToastContainer />
             </div>
         );
     }
