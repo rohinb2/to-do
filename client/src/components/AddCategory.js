@@ -24,13 +24,21 @@ class AddCategory extends Component {
     }
 
     updateCategoryList() {
-        this.addCategoryRequest();
+        this.addCategoryRequest().then(() => {
+            this.props.refresh();
+        });
+        
         this.setState({
             category: ''
         })
     }
 
     addCategoryRequest = async () => {
+
+        if (this.state.category == '') {
+            return;
+        }
+
         const request = {
             credentials: 'include',
             method: 'POST',
@@ -41,6 +49,10 @@ class AddCategory extends Component {
             },
             body: JSON.stringify(this.state)
         }
+
+        return fetch('/api/addcategory/', request).then((response) => {
+            this.props.refresh();
+        });
     }
 
     render() {

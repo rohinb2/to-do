@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 // Setting up a session for cookies (can be switched to JwT later)
 app.use(session({
-    secret: 'adf2f34',
+    secret: '\'' + process.env.SESSION_SECRET + '\'',
     resave: true,
     saveUninitialized: false
 }));

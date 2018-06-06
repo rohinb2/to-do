@@ -46,6 +46,7 @@ module.exports.addCategory = function(req, res, next) {
                 console.log(err);
             }
         });
+    res.sendStatus(200);
 }
 
 module.exports.createTask = function (req, res, next) {
@@ -67,7 +68,7 @@ module.exports.completeTask = function (req, res, next) {
 
 module.exports.uncompleteTask = function (req, res, next) {
     UserControllerHelpers.removeFromUserCompletedTasks(req.user, req.body);
-    UserControllerHelpers.addToUserCompletedTasks(req.user, req.body);
+    UserControllerHelpers.addToUserTasks(req.user, req.body);
     res.sendStatus(200);
 }
 

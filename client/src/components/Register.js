@@ -25,6 +25,7 @@ class Register extends Component {
         this.onFirstChange = this.onFirstChange.bind(this);
         this.onLastChange = this.onLastChange.bind(this);
         this.registerRequest = this.registerRequest.bind(this);
+        this.validateEmail = this.validateEmail.bind(this);
     }
 
     onUsernameChange(event) {
@@ -57,7 +58,7 @@ class Register extends Component {
         // Check if any of the fields are ekpty
         for (var key in this.state) {
             if (this.state.hasOwnProperty(key) && this.state[key] == '') {
-                toast.error('The ' + key + ' field is empty.', { position: toast.POSITION.TOP_CENTER });
+                toast.error('The \'' + key + '\' field is empty.', { position: toast.POSITION.TOP_CENTER });
                 return;
             }
         }
@@ -75,7 +76,7 @@ class Register extends Component {
         }
 
         // Check if email is actually an email
-        if (!this.state.email.includes('@')) {
+        if (!this.validateEmail(this.state.email)) {
             toast.error('Please enter a valid email.', { position: toast.POSITION.TOP_CENTER });
             return;
         }
@@ -98,6 +99,11 @@ class Register extends Component {
                 toast.error('There is already a user registered with this username.', { position: toast.POSITION.TOP_CENTER });
             }
         });
+    }
+
+    validateEmail(email) {
+        var re = /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
+        return re.test(email);
     }
 
     render() {

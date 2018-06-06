@@ -18,6 +18,7 @@ class CategoryPicker extends Component {
 
         this.onCategoryChange = this.onCategoryChange.bind(this);
         this.newCategory = this.newCategory.bind(this);
+        this.refreshCategories = this.refreshCategories.bind(this);
     }
 
     onCategoryChange(option) {
@@ -33,8 +34,7 @@ class CategoryPicker extends Component {
         })
     }
 
-    componentDidMount = async () => {
-        console.log("Updating categories");
+    refreshCategories = async () => {
         var categoryObjArray = await this.getCategories();
         var categoryArray = [];
 
@@ -45,6 +45,10 @@ class CategoryPicker extends Component {
         this.setState({
             categories: categoryArray
         });
+    }
+
+    componentDidMount = async () => {
+        this.refreshCategories();
     }
 
     getCategories = async () => {
@@ -68,7 +72,7 @@ class CategoryPicker extends Component {
                     placeholder="Click me to select a category for your task."
                 />
                 {this.state.showAddCategory ?
-                    <AddCategory /> :
+                    <AddCategory refresh={this.refreshCategories} /> :
                     <button onClick={this.newCategory}> New Category </button>}
             </div>
         )
