@@ -1,8 +1,8 @@
-## To-Do
+# To-Do
 
 Welcome to To-Do! This is a simple MERN-stack (MongoDB, Express, Node.js, ReactJS) web application.
 
-# Setting up on your own machine
+## Setting up on your own machine
 
 To set up the development environment on your own machine, first make sure you have Node and npm set up (If not, you can install [here](https://nodejs.org/en/download/) or if you're on Mac, you can run `brew install node` instead). 
 
