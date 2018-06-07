@@ -4,6 +4,7 @@
 const express = require('express');
 const http = require('http');
 const url = require('url');
+const path = require('path');
 const logger = require('morgan');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -14,6 +15,8 @@ const cors = require('cors');
 
 const app = express();
 const routes = require('./api/routes');
+
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 // Body Parser and Cookie Parser for handling requests
 app.use(logger('dev'))
@@ -68,7 +71,7 @@ app.use(function (err, req, res, next) {
 
 // Start server
 const server = http.createServer(app);
-server.listen(8080, () => {
+server.listen(process.env.PORT || 8080, () => {
     console.log('Express server listening on %d', server.address().port);
 });
 

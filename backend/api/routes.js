@@ -2,6 +2,7 @@
 
 const express = require('express');
 const passport = require('passport');
+const path = require('path');
 const UserController = require('./controllers/UserController');
 const Auth = require('./middleware/auth');
 const Logging = require('./middleware/logging');
@@ -9,12 +10,6 @@ const router = express.Router();
 
 // Additional Logging Middleware
 router.use(Logging.logRequest);
-
-router.get('/hello', function(req, res) {
-    res.send({
-        express: 'Your To-Do App'
-    })
-})
 
 // User related endpoints
 router.post('/register', UserController.register);
@@ -33,5 +28,10 @@ router.get('/getcompletedtasks', Auth.loggedIn, UserController.getCompletedTaskA
 // Category related endpoints
 router.post('/addcategory', Auth.loggedIn, UserController.addCategory);
 router.get('/getcategories', Auth.loggedIn, UserController.getCategoryArray);
+
+// For rendering React app in heroku
+router.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '../../client/build/index.html'));
+});
 
 module.exports = router;

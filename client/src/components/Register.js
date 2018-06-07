@@ -91,10 +91,12 @@ class Register extends Component {
         }
 
         fetch('/api/register/', request).then((response) => {
-            if (response.status == 302) {
+            if (response.status == 302 || response.status == 200) {
+                console.log("Reaching response status == 302");
                 setTimeout(() => {
                     window.location = '/login';
-                }, 100);
+                }, 1000);
+                toast.success('Successfully registered user', { position : toast.POSITION.TOP_CENTER });
             } else if (response.status == 404) {
                 toast.error('There is already a user registered with this username.', { position: toast.POSITION.TOP_CENTER });
             }
