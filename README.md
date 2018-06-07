@@ -1,7 +1,7 @@
 # To-Do
 
 Welcome to To-Do! This is a simple MERN-stack (MongoDB, Express, Node.js, ReactJS) web application.
-This app is currently deployed [here](to-do-rb.herokuapp.com)! Go check it out and feel free to file an issue for not working features or bugs.
+This app is currently deployed [here](https://to-do-rb.herokuapp.com)! Go check it out and feel free to file an issue for not working features or bugs.
 
 ## Setting up on your own machine
 
